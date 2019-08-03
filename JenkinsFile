@@ -1,0 +1,72 @@
+#!/usr/bin/groovy
+
+def dockerImage = ""
+
+//method pre-defining tagging and upload to repo
+def dockerUpload(tag){
+  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKER_HUB', passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME']]) {
+    sh "docker login -u=${env.DOCKER_HUB_USERNAME} -p=${env.DOCKER_HUB_PASSWORD}"
+    sh "docker push ${tag}"
+  }
+}
+
+ansiColor('xterm') {
+  node {
+
+    stage('Checkout'){
+      println('Pull Project')
+      checkout([$class: 'GitSCM',
+        branches: [[name: '*/master']],
+        doGenerateSubmoduleConfigurations: false,
+        submoduleCfg: [],
+        userRemoteConfigs: [[credentialsId:  'GIT_TOKEN', url: 'https://git.example.com']]])
+      }
+
+
+    stage('Build'){
+       //build stage builds npm project in workspace and runs tests, if test isn't defined in project, project will fail
+       try {
+            sh 'npm install:build project'
+            sh 'npm run:test'
+        }
+        catch(e) {
+          currentBuild.result = "FAILURE"
+        }
+    }
+
+    stage ('SonarQube Scan') {
+       //security scan with sonarr
+       steps {
+         sh "/usr/bin/sonar-scanner"
+       }
+    }
+
+    stage ('Quality Gate') {
+        //quality gate analyses the results of the scan and if there is security flaws the build fail
+
+        timeout(time: 5, unit: 'MINUTES') {
+        def qualitygate = waitForQualityGate()
+        if (qualitygate.status != "OK") {
+            error "Pipeline aborted due to quality gate coverage failure."
+            }
+        }
+    }
+
+
+
+    dockerImage = "myproject/secure-web:$BUILD_NUMBER"
+
+
+     stage('Build Docker Image'){
+       println('Compiling docker image')
+
+           sh """
+             docker build --pull --build-arg NPM_AUTH_TOKEN=${NPM_AUTH} -t ${dockerImage} -f Dockerfile .
+             """
+
+             println('Upload image to docker hub')
+             pipeline.dockerUpload(dockerImage)
+       }
+  }
+}
+

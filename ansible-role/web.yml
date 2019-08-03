@@ -1,0 +1,17 @@
+---
+
+- hosts: localhost
+  become: true
+  become_user: root
+  become_method: sudo
+  vars:
+    apache_vhosts:
+      - {servername: dev1.site.com, port: "7071", documentroot: "/home/dev1"}
+      - {servername: dev2.site.com, port: "7072", documentroot: "/home/dev2"}
+      - {servername: dev3.site.com, port: "7073", documentroot: "/home/dev3"}
+
+  roles:
+    - security
+    - users
+    - apache
+

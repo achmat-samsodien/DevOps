@@ -1,0 +1,5 @@
+---
+  - name: apache
+    scm: git
+    src: git+http://internaltest.example.com/repos/infra/apache.git
+    version: 1.4
