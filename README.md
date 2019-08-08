@@ -2,7 +2,7 @@
 DevOpsChallenge 04/08/2010
 
 
-##Ansible Role
+### Ansible Role
 
 To run the ansible role, checkout out repository
 
@@ -28,7 +28,7 @@ ansible-playbook --connection=webserver web.yml
 
 ```
 
-###JenkinsFile
+### JenkinsFile
 
 The JenkinsFile represents the pipeline specified in the spec document
 
@@ -38,7 +38,7 @@ The JenkinsFile represents the pipeline specified in the spec document
 - Security scanning is done by a tool I've used before, sonarr, the implementation here scans the project and will only pass the pipeline if there is no errors. Pre-requisite is that it should be at least Jenkisn 2.6
 - Finally once checks and balances are complete the code then writes to a Dockerfile and pushes to a docker private repo, the method at the top pre-defines the repo details
 
-###User Permission Test
+### User Permission Test
 
 The python script tests the user permissions of the users creates in ansible role.
 
@@ -52,7 +52,7 @@ This example assumes dev1 writing it's own and to dev2 directory, error will pri
 
 I've tried to develop into a unit test but my experience is a little limited and time at the moment won't allow to delve deeper
 
-###Misc
+### Misc
 
 You will notice in this directory 2 extra scripts:
 
