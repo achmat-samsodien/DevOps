@@ -37,9 +37,7 @@ terraform apply -var-file terraform.tfvars
 
 ``` 
 
-### Improvements
+### TODO:
 
-Unfortunately I cannot allocate more time to this project due to other pressing commitments
-
-Changes I'd have liked to make is separate and modularise the different components and also add more 
+modularise the different components and also add more 
 variable options.
