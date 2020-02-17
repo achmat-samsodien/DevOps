@@ -1,5 +1,3 @@
-# Blackswan DevOps Challenge
-
 ## Setup
 
 Pre-requisites to running project:
