@@ -1,6 +1,5 @@
-# DevOpsChallenge
-DevOpsChallenge 04/08/2019
-
+# DevOps Portfolio
+Things I've worked on in the past, theoretical and real world examples to every day problems
 
 ### Ansible Role
 
